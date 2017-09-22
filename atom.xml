@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
   <title>Luuman&#39;s Blog</title>
-  <subtitle>因为有了危机感，所以会义无反顾。</subtitle>
+  <subtitle>城已成，兵不封，鼓不停，志不移，行不息</subtitle>
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://luuman.github.io/"/>
@@ -9,7 +9,7 @@
   <id>http://luuman.github.io/</id>
   
   <author>
-    <name>世平阜康</name>
+    <name>Jimmey-Jiang</name>
     
   </author>
   
