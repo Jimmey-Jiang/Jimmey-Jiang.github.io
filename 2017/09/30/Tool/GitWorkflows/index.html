@@ -1,0 +1,932 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Git Workflows | Jimmey-Jiang&#39;s Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="概要随着团队不断的壮大，业务流程迭代。代码工作流的规范是显而易见的。为了保证开发速度，我们不断改进完善这个发布流程，让这个过程更简单、高效。这篇指南以大家在SVN中已经广为熟悉使用的集中式工作流作为起点，循序渐进地演进到其它高效的分布式工作流，还介绍了如何配合使用便利的Pull Request功能，体系地讲解了各种工作流的应用。在阅读过程中，请记住这些工作流是指导原则，而不是具体规则。我们想向您展">
+<meta name="keywords" content="Git">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Git Workflows">
+<meta property="og:url" content="http://Jimmey-Jiang.github.io/2017/08/29/Tool/GitWorkflows/index.html">
+<meta property="og:site_name" content="Jimmey-Jiang&#39;s Blog">
+<meta property="og:description" content="概要随着团队不断的壮大，业务流程迭代。代码工作流的规范是显而易见的。为了保证开发速度，我们不断改进完善这个发布流程，让这个过程更简单、高效。这篇指南以大家在SVN中已经广为熟悉使用的集中式工作流作为起点，循序渐进地演进到其它高效的分布式工作流，还介绍了如何配合使用便利的Pull Request功能，体系地讲解了各种工作流的应用。在阅读过程中，请记住这些工作流是指导原则，而不是具体规则。我们想向您展">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://wiki.jikexueyuan.com/project/git-workflow-tutorial/images/git-workflow-svn.png">
+<meta property="og:image" content="http://wiki.jikexueyuan.com/project/git-workflow-tutorial/images/git-workflow-svn-push-local.png">
+<meta property="og:image" content="https://wac-cdn.atlassian.com/dam/jcr:21cf772d-2ba5-4686-8259-fcd6fd2311df/05.svg?cdnVersion=fn">
+<meta property="og:image" content="https://wac-cdn.atlassian.com/dam/jcr:e3bd4199-27ac-4bac-a5d2-3ff0fdb112d3/01.svg?cdnVersion=fn">
+<meta property="og:image" content="https://wac-cdn.atlassian.com/dam/jcr:2e2315b0-d79a-403f-a981-4cb94599df1f/02.svg?cdnVersion=fn">
+<meta property="og:image" content="https://wac-cdn.atlassian.com/dam/jcr:9f149cef-f784-43de-8207-3e7968789a1f/03.svg?cdnVersion=fn">
+<meta property="og:image" content="https://wac-cdn.atlassian.com/dam/jcr:57829b6b-1e6d-40ea-a15a-1a2fe6bf80f6/07.svg?cdnVersion=fn">
+<meta property="og:image" content="https://wac-cdn.atlassian.com/dam/jcr:3555a856-675e-453a-b49d-ba60667809e1/04.svg?cdnVersion=fn">
+<meta property="og:image" content="https://wac-cdn.atlassian.com/dam/jcr:21cf772d-2ba5-4686-8259-fcd6fd2311df/05.svg?cdnVersion=fn">
+<meta property="og:updated_time" content="2017-08-01T08:13:53.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Git Workflows">
+<meta name="twitter:description" content="概要随着团队不断的壮大，业务流程迭代。代码工作流的规范是显而易见的。为了保证开发速度，我们不断改进完善这个发布流程，让这个过程更简单、高效。这篇指南以大家在SVN中已经广为熟悉使用的集中式工作流作为起点，循序渐进地演进到其它高效的分布式工作流，还介绍了如何配合使用便利的Pull Request功能，体系地讲解了各种工作流的应用。在阅读过程中，请记住这些工作流是指导原则，而不是具体规则。我们想向您展">
+<meta name="twitter:image" content="http://wiki.jikexueyuan.com/project/git-workflow-tutorial/images/git-workflow-svn.png">
+  
+    <link rel="alternative" href="/atom.xml" title="Jimmey-Jiang&#39;s Blog" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/img/favicon.png">
+  
+  
+      <link rel="stylesheet" href="//cdn.bootcss.com/animate.css/3.5.0/animate.min.css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/font-awesome/css/font-awesome.min.css">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  
+  
+      <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  
+  <!-- 加载特效 -->
+    <script src="/js/pace.js"></script>
+    <link href="/css/pace/pace-theme-flash.css" rel="stylesheet" />
+  <script>
+      var yiliaConfig = {
+          rootUrl: '/',
+          fancybox: true,
+          animate: true,
+          isHome: false,
+          isPost: true,
+          isArchive: false,
+          isTag: false,
+          isCategory: false,
+          open_in_new: false
+      }
+  </script>
+</head>
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+    <header id="header" class="inner">
+        <a href="/" class="profilepic">
+            
+            <img lazy-src="/img/head.jpg" class="js-avatar">
+            
+        </a>
+
+        <hgroup>
+          <h1 class="header-author"><a href="/" title="Hi Mate">安与生</a></h1>
+        </hgroup>
+
+        
+        <p class="header-subtitle">城已成，兵不封，鼓不停，志不移，行不息</p>
+        
+        
+            <form>
+                <input type="text" class="st-default-search-input search" id="search" placeholder=" Search...">
+            </form>
+        
+        
+            <div id="switch-btn" class="switch-btn">
+                <div class="icon">
+                    <div class="icon-ctn">
+                        <div class="icon-wrap icon-house" data-idx="0">
+                            <div class="birdhouse"></div>
+                            <div class="birdhouse_holes"></div>
+                        </div>
+                        <div class="icon-wrap icon-ribbon hide" data-idx="1">
+                            <div class="ribbon"></div>
+                        </div>
+                        
+                        <div class="icon-wrap icon-link hide" data-idx="2">
+                            <div class="loopback_l"></div>
+                            <div class="loopback_r"></div>
+                        </div>
+                        
+                        
+                        <div class="icon-wrap icon-me hide" data-idx="3">
+                            <div class="user"></div>
+                            <div class="shoulder"></div>
+                        </div>
+                        
+                    </div>
+                    
+                </div>
+                <div class="tips-box hide">
+                    <div class="tips-arrow"></div>
+                    <ul class="tips-inner">
+                        <li>菜单</li>
+                        <li>标签</li>
+                        
+                        <li>友情链接</li>
+                        
+                        
+                        <li>关于我</li>
+                        
+                    </ul>
+                </div>
+            </div>
+        
+
+        <div id="switch-area" class="switch-area">
+            <div class="switch-wrap">
+                <section class="switch-part switch-part1">
+                    <nav class="header-menu">
+                        <ul>
+                        
+                            <li><a href="/archives">所有文章</a></li>
+                        
+                            <li><a href="/works">作品展示</a></li>
+                        
+                           <li><a href="/about">留言打卡</a></li>
+                        
+                            <li><a  target="_blank" href="https://tuchong.com/1496450/">摄影集展示</a></li>
+                        
+                        </ul>
+                    </nav>
+                    <nav class="header-nav">
+                        <ul class="social">
+                            
+                                <a class="fl mail" target="_blank" href="http://mail.qq.com/cgi-bin/qm_share?t=qm_mailme&email=4trX0tXT19PV1aKTk8yBjY8" title="mail">mail</a>
+                            
+                                <a class="fl github" target="_blank" href="https://github.com/Jimmey-Jiang" title="github">github</a>
+                            
+                                <a class="fl zhihu" target="_blank" href="https://www.zhihu.com" title="zhihu">zhihu</a>
+                            
+                                <a class="fl weibo" target="_blank" href="http://weibo.com" title="weibo">weibo</a>
+                            
+                                <a class="fl google" target="_blank" href="http://i.youku.com" title="google">google</a>
+                            
+                                <a class="fl twitter" target="_blank" href="http://twitter.com" title="twitter">twitter</a>
+                            
+                                <a class="fl Instagram" target="_blank" href="https://www.instagram.com" title="Instagram">Instagram</a>
+                            
+                                <a class="fl linkedin" target="_blank" href="https://www.linkedin.com" title="linkedin">linkedin</a>
+                            
+                        </ul>
+                    </nav>
+                </section>
+                
+                
+                <section class="switch-part switch-part2">
+                    <div class="widget tagcloud" id="js-tagcloud">
+                        <a href="/tags/Ajax/" style="font-size: 11.67px;">Ajax</a> <a href="/tags/CDN/" style="font-size: 10px;">CDN</a> <a href="/tags/CSS/" style="font-size: 18.33px;">CSS</a> <a href="/tags/CSS3/" style="font-size: 11.67px;">CSS3</a> <a href="/tags/Chrome/" style="font-size: 10px;">Chrome</a> <a href="/tags/Development/" style="font-size: 10px;">Development</a> <a href="/tags/Front-end-outline/" style="font-size: 10px;">Front end outline</a> <a href="/tags/FrontPlan/" style="font-size: 10px;">FrontPlan</a> <a href="/tags/Git/" style="font-size: 11.67px;">Git</a> <a href="/tags/Gulp/" style="font-size: 10px;">Gulp</a> <a href="/tags/HTML/" style="font-size: 13.33px;">HTML</a> <a href="/tags/Hack/" style="font-size: 10px;">Hack</a> <a href="/tags/Hexo/" style="font-size: 16.67px;">Hexo</a> <a href="/tags/Interview/" style="font-size: 10px;">Interview</a> <a href="/tags/JavaScript/" style="font-size: 13.33px;">JavaScript</a> <a href="/tags/Javascript/" style="font-size: 10px;">Javascript</a> <a href="/tags/Markdown/" style="font-size: 10px;">Markdown</a> <a href="/tags/Mobile/" style="font-size: 13.33px;">Mobile</a> <a href="/tags/NodeJs/" style="font-size: 10px;">NodeJs</a> <a href="/tags/OOCSS/" style="font-size: 10px;">OOCSS</a> <a href="/tags/React/" style="font-size: 10px;">React</a> <a href="/tags/ReactNative/" style="font-size: 20px;">ReactNative</a> <a href="/tags/Sass/" style="font-size: 10px;">Sass</a> <a href="/tags/Sublime/" style="font-size: 15px;">Sublime</a> <a href="/tags/Terminal/" style="font-size: 10px;">Terminal</a> <a href="/tags/Video/" style="font-size: 10px;">Video</a> <a href="/tags/Vue/" style="font-size: 15px;">Vue</a> <a href="/tags/WeChatSDK/" style="font-size: 10px;">WeChatSDK</a> <a href="/tags/rem/" style="font-size: 10px;">rem</a> <a href="/tags/window-7/" style="font-size: 10px;">window 7</a>
+                    </div>
+                </section>
+                
+                
+                
+                <section class="switch-part switch-part3">
+                    <div id="js-friends">
+                    
+                      <a target="_blank" class="main-nav-link switch-friends-link" href="http://MOxFIVE.github.io/">MOxFIVE</a>
+                    
+                      <a target="_blank" class="main-nav-link switch-friends-link" href="http://www.vsay.cn/">DoubleV</a>
+                    
+                      <a target="_blank" class="main-nav-link switch-friends-link" href="http://www.ccwebsite.com/">兮兮</a>
+                    
+                      <a target="_blank" class="main-nav-link switch-friends-link" href="http://blog.dandyweng.com/">翁天信</a>
+                    
+                      <a target="_blank" class="main-nav-link switch-friends-link" href="http://www.plqblog.com/views/index.php">潘利强</a>
+                    
+                      <a target="_blank" class="main-nav-link switch-friends-link" href="http://www.hankin.cn/">hankin</a>
+                    
+                      <a target="_blank" class="main-nav-link switch-friends-link" href="http://blog.waydrow.com/">waydrow</a>
+                    
+                      <a target="_blank" class="main-nav-link switch-friends-link" href="https://www.tangbc.com">TANGBC</a>
+                    
+                      <a target="_blank" class="main-nav-link switch-friends-link" href="https://www.w3ctrain.com/">Helkyle</a>
+                    
+                    </div>
+                </section>
+                
+
+                
+                
+                <section class="switch-part switch-part4">
+                
+                    <div id="js-aboutme">城已成，兵不封，鼓不停，志不移，行不息</div>
+                </section>
+                
+            </div>
+        </div>
+    </header>                
+</div>
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+      <div class="overlay">
+          <div class="slider-trigger"></div>
+          <h1 class="header-author js-mobile-header hide"><a href="/" title="Me">安与生</a></h1>
+      </div>
+    <div class="intrude-less">
+        <header id="header" class="inner">
+            <a href="/" class="profilepic">
+                
+                    <img lazy-src="/img/head.jpg" class="js-avatar">
+                
+            </a>
+            <hgroup>
+              <h1 class="header-author"><a href="/" title="Me">安与生</a></h1>
+            </hgroup>
+            
+            <p class="header-subtitle">城已成，兵不封，鼓不停，志不移，行不息</p>
+            
+            <nav class="header-menu">
+                <ul>
+                
+                    <li><a href="/archives">所有文章</a></li>
+                
+                    <li><a href="/works">作品展示</a></li>
+                
+                   <li><a href="/about">留言打卡</a></li>
+                
+                    <li><a  target="_blank" href="https://tuchong.com/1496450/">摄影集展示</a></li>
+                
+                <div class="clearfix"></div>
+                </ul>
+            </nav>
+            <nav class="header-nav">
+                <div class="social">
+                    
+                        <a class="mail" target="_blank" href="http://mail.qq.com/cgi-bin/qm_share?t=qm_mailme&email=4trX0tXT19PV1aKTk8yBjY8" title="mail">mail</a>
+                    
+                        <a class="github" target="_blank" href="https://github.com/Jimmey-Jiang" title="github">github</a>
+                    
+                        <a class="zhihu" target="_blank" href="https://www.zhihu.com" title="zhihu">zhihu</a>
+                    
+                        <a class="weibo" target="_blank" href="http://weibo.com" title="weibo">weibo</a>
+                    
+                        <a class="google" target="_blank" href="http://i.youku.com" title="google">google</a>
+                    
+                        <a class="twitter" target="_blank" href="http://twitter.com" title="twitter">twitter</a>
+                    
+                        <a class="Instagram" target="_blank" href="https://www.instagram.com" title="Instagram">Instagram</a>
+                    
+                        <a class="linkedin" target="_blank" href="https://www.linkedin.com" title="linkedin">linkedin</a>
+                    
+                </div>
+            </nav>
+        </header>                
+    </div>
+</nav>
+      <div class="body-wrap"><article id="post-Tool/GitWorkflows" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2017/08/29/Tool/GitWorkflows/" class="article-date">
+      <time datetime="2017-08-29T06:11:20.000Z" itemprop="datePublished">2017-08-29</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Git Workflows
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+    <div class="article-category tagcloud">
+    <a class="article-category-link" href="/categories/Tool/">Tool</a>
+    </div>
+
+        
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Git/">Git</a></li></ul>
+    </div>
+
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        返回简书总目录:[ABP+AdminLTE+Bootstrap Table权限管理系统一期](http://www.jianshu.com/p/3851d663569e) 
+        前往博客园总目录:[ABP+AdminLTE+Bootstrap Table权限管理系统一期](http://www.cnblogs.com/anyushengcms/p/7325126.html)
+              第一点,上一篇文章中我们讲到codefirst中一些问题包括如图，codefirst在每次执行命令的时候会生成新的类，后来会越来越多。
+        ![](http://upload-images.jianshu.io/upload_images/6855212-e0c0e5cdaf5879a3.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+        1,codefirst在执行的数据库迁移过程中产生了很多文件,对于强迫症的我而言特别不爽,这些其实是可以不用生成的。
+        2,在codefirst实际开发过程的冲突
+        3,每次增加一个表或者增删改一个字段都要去敲命令,好麻烦
+        4,数据库初始化的时候，不用把很多东西写入程序里面。
+        5,其实有时候报错不好找错误的原因
+        6,对于存储过程的执行，可以放到脚本里面。
+        7，菜单初始化，管理员等基础配置可以放到脚本里面。
+        8，对于已经建好的表，需要修改吗，增加，删除字段的时候我们可以用存储过程处理。可以写在脚本里面、
+        9.索引可以写在脚本里面。
+        10，还有其他包含数据库定时执行业务逻辑的作业之类的等等其他特点。
+        针对这些我在这个项目采用了以前get到的一种方法--脚本的方法去处理数据库
+                 第二点,abp module-zero里面的很多东西需要一定基础才能看懂,才能整明白,然后在新建项目的时候,我们并不希望而且不建议包含module-zero里面的内容.
+        针对以上我们到abp生成了下面的项目:
+        ![](http://upload-images.jianshu.io/upload_images/6855212-1cadcceb4ed7066c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+           下面是我们生成包含module-zero的项目
+        ![](http://upload-images.jianshu.io/upload_images/6855212-f80519a7760d0fb8.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+                 在JCmsErp新生成的里面我们看到,在Application层和Core层少了很多关于zero的业务逻辑和模型,初次在生成对很多人会造成困扰.
+                  此后我们以JCmsErp开始以后的项目.
+                  1,修改数据连接
+                  2,还原NuGet包
+        ![](http://upload-images.jianshu.io/upload_images/6855212-0a3aa3ffd96af5af.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+              3,F5生成之后我们看到项目如下.
+        ![](http://upload-images.jianshu.io/upload_images/6855212-ee2742cffc42548e.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+        项目生成成功之后，一切准备就绪，.开始进入正题,数据库脚本.
+        首先我们看一下abp自带的连接数据库的数据库上下文
+        ![](http://upload-images.jianshu.io/upload_images/6855212-0daffaa7b9445d35.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+         
+          这里已经建好了自动获取数据库连接连接上方式的类
+         然后我们在它下面建一个获取数据库上下文的类ContextFactory，只是在ABP的基础上扩展出来的类。
+        ![](http://upload-images.jianshu.io/upload_images/6855212-0fe51e8900c26243.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+         
+        里面获取上下文的类代码我已经写好.
+        ```
+        public class ContextFactory
+            {        /// <summary>
+                     /// 获取当前数据上下文
+                     /// </summary>
+                     /// <returns></returns>
+                public static JCMSDbContext GetCurrentContext()
+                {
+                    JCMSDbContext db = CallContext.GetData("Default") as JCMSDbContext;
+                    if (db == null)
+                    {
+                        db = new JCMSDbContext();
+                        CallContext.SetData("Default", db);
+                    }
+                    return db;
+                }
+        
+                public static void GetCurrentContextSetDatabaseExecuteSqlCommand(string FullName)
+                {
+                    JCMSDbContext db = CallContext.GetData("Default") as JCMSDbContext;
+                    db.Database.ExecuteSqlCommand(System.IO.File.ReadAllText(FullName, Encoding.Default));
+                }
+            }
+        ```
+         
+        为了做好准备工作,我们再在web目录下创建Data文件夹,在Data文件夹下建一个脚本Users
+        ![](http://upload-images.jianshu.io/upload_images/6855212-9616ad1377de9253.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+         
+        在脚本里面添加数据库脚本.
+        ![](http://upload-images.jianshu.io/upload_images/6855212-852c171c692a87c7.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+        做好了这些,然后我们在去home控制器里面添加ActionResult InitDataBase 并且添加InitDataBase 试图,在InitDataBase 里面写好简单样式按钮.
+        ![](http://upload-images.jianshu.io/upload_images/6855212-cf1b31734af61ec5.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+        此处为了方便,我引了bootstrap-3.2.0的样式和js,看下出来页面
+        ![](http://upload-images.jianshu.io/upload_images/6855212-301a0db71caf2a26.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+        什么,样子丑?样子丑就别管了,凑合凑合了...
+        注意上面按钮js执行的方法,指向控制器里面的方法,看下控制器的另一个方法,操作数据库的方法 
+        ![](http://upload-images.jianshu.io/upload_images/6855212-e6fa94d46740e1f2.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+        CheckDatabase方法指向了连接数据库操作数据库的EntityFramework的方法,为了操作数据库,我在ContextFactory又添加了两个方法,看一下
+        ![](http://upload-images.jianshu.io/upload_images/6855212-b97c9be2d73498bd.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+        然后点击InitDataBase页面的按钮,接下来就是见证奇迹的时刻了,奇迹就是本章的主题,根据脚本自动创建数据库了,来看下前后对面.
+        这里我已经把abp自带的数据库删除了，这是执行前的数据库。
+        ![](http://upload-images.jianshu.io/upload_images/6855212-5327af309282090a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+        执行后user数据库就已经根据脚本自动生成数据库了。
+        ![](http://upload-images.jianshu.io/upload_images/6855212-7f9315c58b5c810e.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+         
+        执行之后,我们创建表的语句就在数据库里面了.我们还可以在脚本里面写初始化需要的数据,
+        以后你会发现脚本有它强大的地方
+        1,初始化需要的管理员角色,
+        2,菜单
+        3,初始化需要的必须的数据
+        4,执行的存储过程
+        5,比如直接调用存储过程修改表的语句。
+        ```
+        call proc_update_field('course','audiences','longtext default null','');
+        call proc_add_field('course', 'picFileId', 'varchar(36) default null', ' comment ''上传图片文件Id'' after `isAutoNo`');
+        ```
+        6，比如索引的操作
+        
+        ```
+        drop procedure if exists del_idx;
+        create procedure del_idx(IN p_tablename varchar(50), IN p_idxname varchar(50))
+            comment '删除索引'
+        begin
+            set @schema_name = database();    
+            set @str=concat('drop index ',p_idxname,' on ', @schema_name, '.', p_tablename, ';');
+            select count(*) into @cnt from information_schema.statistics where TABLE_SCHEMA=@schema_name and table_name=p_tablename and index_name=p_idxname;
+        
+            if @cnt > 0 then
+                call excuteproc(@str);
+            end if;
+        end ;
+        ```
+        
+        7,对于大型的数据我们直接通过脚本直接操作数据库，不必通过底层orm框架。当然也可以abp在原有的基础上扩展
+          至此,第二章关于数据库脚本就写完了,其实涉及到的代码很简单，就是简单的数据操作。重要的是这种思想和扩展。还有很多功能没有展示在项目里面，包括索引扫描的，其实都可以自己去试一试的。最近比较忙，都没时间去写。
+        需要的可以去下载源码看一下：  项目GitHub地址:[https://github.com/Jimmey-Jiang/JCMS](https://github.com/Jimmey-Jiang/JCMS)
+         附上数据库代码:
+        ```
+        SET ANSI_NULLS ON;
+        GO
+        SET QUOTED_IDENTIFIER ON;
+        GO
+        CREATE TABLE [dbo].[Users]
+            (
+              [Id] [INT] IDENTITY(1, 1)
+                         NOT NULL ,
+              [UserName] [NVARCHAR](20) NOT NULL ,
+              [Password] [NVARCHAR](32) NOT NULL ,
+              [Email] [NVARCHAR](50) NOT NULL ,
+              [Phone] [NVARCHAR](50) NULL ,
+              [Address] [NVARCHAR](300) NULL ,
+              [UpdateDate] [DATETIME] NOT NULL ,
+              [TrueName] [NVARCHAR](20) NOT NULL ,
+              [Enabled] [BIT] NOT NULL ,
+              [CreationTime] [DATETIME] NULL ,
+              [IsDeleted] [BIT] NULL ,
+              [CreatorUserId] [NVARCHAR](20) NULL ,
+              [LastModificationTime] [DATETIME] NULL
+            )
+        ON  [PRIMARY];
+        
+        GO
+        SET IDENTITY_INSERT [dbo].[Users] ON; 
+        
+        GO
+        INSERT  [dbo].[Users]
+                ( [id] ,
+                  [UserName] ,
+                  [Password] ,
+                  [Email] ,
+                  [Phone] ,
+                  [Address] ,
+                  [UpdateDate] ,
+                  [TrueName] ,
+                  [Enabled] ,
+                  [CreationTime] ,
+                  [IsDeleted] ,
+                  [CreatorUserId] ,
+                  [LastModificationTime]
+                )
+        VALUES  ( 1 ,
+                  N'admin' ,
+                  N'123456' ,
+                  N'2181130@qq.com' ,
+                  N'156156156156156' ,
+                  N'深圳' ,
+                  CAST(0x0000A7C000000000 AS DATETIME) ,
+                  N'admin' ,
+        ,
+                  CAST(0x0000A7C000000000 AS DATETIME) ,
+        ,
+                  N'1' ,
+                  CAST(0x0000A7C000000000 AS DATETIME)
+                );
+        GO
+        SET IDENTITY_INSERT [dbo].[Users] OFF;
+        GO
+        ```
+        
+        InitDataBase页面代码：
+        ```
+        @{
+            ViewBag.Title = "InitDataBase";
+        }
+        
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <title>JCMS安装程序</title>
+            <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+            <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+            <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+            <link href="~/Scripts/bootstrap-3.2.0/css/bootstrap.css" rel="stylesheet" />
+            <link href="~/Scripts/bootstrap-3.2.0/css/install.css" rel="stylesheet" />
+        </head>
+        <body>
+            <div class="install-container">
+                <div class="paper">
+                    <div class="paper-heading">
+                        <h1>
+                            <span class="brand">JCMS</span> <span class="text-muted">安装向导</span>
+                        </h1>
+                    </div>
+                    <div class="paper-body">
+                        <div class="actions">
+                            <button id="btnInit" class="btn btn-default">
+                                初始化数据
+                            </button>
+                            <div id="info">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <script src="~/Scripts/jquery-2.1.4.js"></script>
+            <script src="~/Scripts/jquery-2.1.4.min.js"></script>
+            <script src="~/Scripts/bootstrap.js"></script>
+            <script type="text/javascript">
+                $("#btnInit").click(function () {
+                    $(this).attr("disabled", "disabled");
+                    $(this).next().text("正在初始化数据......");
+        
+                    var btnInit = $(this).next();
+                    var lbTip = $(this).next();
+                    $.ajax({
+                        url: '/Home/CheckDatabase',
+                        success: function (data) {
+                            if (data.success) {
+                               // $.messager.alert('提示', '操作成功！请重启站点！');
+                                window.location = "/Home/Login";
+                            } else {
+                                alert('操作失败！请查看日志！');
+                            }
+                        },
+                        error: function () {
+                            alert('初始化数据失败！');
+                        },
+                        complete: function () {
+                            $.messager.progress('close');
+                        }
+                    });
+                });
+            </script>
+        </body>
+        </html>
+        ```
+        
+         HomeController代码：
+        
+        ```
+        private JCMSDbContext db = ContextFactory.GetCurrentContext();
+        
+                [DisableAbpAntiForgeryTokenValidation]
+                [HttpGet]
+                [DontWrapResult]
+                public ActionResult Login()
+                {
+                    return View();
+                }
+        
+        
+                public ActionResult InitDataBase()
+                {
+                    return View();
+                }
+        
+                //初始化
+                public JsonResult CheckDatabase()
+                {
+                    // db.Users
+        
+                    var success = true;
+        
+                    List<FileInfo> list = new List<FileInfo>();
+                    foreach (var item in Directory.GetFiles(AppDomain.CurrentDomain.BaseDirectory + "Data"))
+                    {
+                        list.Add(new FileInfo(item));
+                    }
+                    var item0 = (from e in list where e.Name != "procedure.sql" select new { e.FullName, e.Name }).FirstOrDefault();
+                    try
+                    {
+        
+                        var items = from e in list where e.Name != "procedure.sql" && e.Name != "nv_folder.sql" && e.Name != "index.sql" && e.Extension == ".sql" select new { e.FullName, e.Name };
+                        foreach (var item in items)
+                        {
+                            try
+                            {
+                                ContextFactory.GetCurrentContextSetDatabaseExecuteSqlCommand(item.FullName);
+                            }
+                            catch (Exception ex)
+                            {
+                                success = false;
+                                Logger.Error("脚本" + item.Name + "：" + ex);
+                            }
+                        }
+        
+                    }
+                    catch (Exception ex)
+                    {
+                        success = false;
+                        Logger.Error("脚本" + item0.Name + "：" + ex);
+                    }
+        
+        
+        
+                    return Json(new { success = success }, JsonRequestBehavior.AllowGet);
+                }
+        ```
+        
+         
+         
+        返回简书总目录:[ABP+AdminLTE+Bootstrap Table权限管理系统一期](http://www.jianshu.com/p/3851d663569e) 
+        前往博客园总目录:[ABP+AdminLTE+Bootstrap Table权限管理系统一期](http://www.cnblogs.com/anyushengcms/p/7325126.html)
+        
+
+      
+      
+        <div class="page-reward">
+          <p><a href="javascript:void(0)" onclick="dashangToggle()" class="dashang">赏</a></p>
+          <div class="hide_box"></div>
+          <div class="shang_box">
+            <a class="shang_close" href="javascript:void(0)" onclick="dashangToggle()">×</a>
+            <div class="shang_tit">
+              <p>纯属好玩</p>
+            </div>
+            <div class="shang_payimg">
+              <img src="/img/alipayimg.jpg" alt="扫码支持" title="扫一扫" />
+            </div>
+              <div class="pay_explain">扫码打赏，你说多少就多少</div>
+            <div class="shang_payselect">
+              
+                <div class="pay_item checked" data-id="alipay">
+                  <span class="radiobox"></span>
+                  <span class="pay_logo"><img src="/img/alipay.png" alt="支付宝" /></span>
+                </div>
+              
+              
+                <div class="pay_item" data-id="wechat">
+                  <span class="radiobox"></span>
+                  <span class="pay_logo"><img src="/img/weixin.png" alt="微信" /></span>
+                </div>
+              
+            </div>
+            <div class="shang_info">
+              <p>打开<span id="shang_pay_txt">支付宝</span>扫一扫，即可进行扫码打赏哦</p>
+            </div>
+          </div>
+        </div>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/zepto/1.2.0/zepto.min.js"></script>
+        <script type="text/javascript">
+          $(".pay_item").click(function(){
+            $(this).addClass('checked').siblings('.pay_item').removeClass('checked');
+            var dataid=$(this).attr('data-id');
+            $(".shang_payimg img").attr("src","/img/"+dataid+"img.jpg");
+            $("#shang_pay_txt").text(dataid=="alipay"?"支付宝":"微信");
+          });
+          function dashangToggle(){
+            window._hmt.push(['_trackEvent', 'pay', 'click', '赏'])
+            $(".hide_box").fadeToggle();
+            $(".shang_box").fadeToggle();
+          }
+        </script>
+      
+    </div>
+    
+  </div>
+  
+    
+    <div class="copyright">
+        <p><span>本文标题:</span><a href="/2017/08/29/Tool/GitWorkflows/">Git Workflows</a></p>
+        <p><span>文章作者:</span><a href="/" title="访问 安与生 的个人博客">安与生</a></p>
+        <p><span>发布时间:</span>2017年08月29日 - 14时11分</p>
+        <p><span>最后更新:</span>2017年08月01日 - 16时13分</p>
+        <p>
+            <span>原始链接:</span><a class="post-url" href="/2017/08/29/Tool/GitWorkflows/" title="Git Workflows">http://Jimmey-Jiang.github.io/2017/08/29/Tool/GitWorkflows/</a>
+            <span class="copy-path" data-clipboard-text="原文: http://Jimmey-Jiang.github.io/2017/08/29/Tool/GitWorkflows/　　作者: 安与生" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
+            <script src="/js/clipboard.min.js"></script>
+            <script> var clipboard = new Clipboard('.copy-path'); </script>
+        </p>
+        <p>
+            <span>许可协议:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/3.0/cn/" title="中国大陆 (CC BY-NC-SA 3.0 CN)" target = "_blank">"署名-非商用-相同方式共享 3.0"</a> 转载请保留原文链接及作者。
+        </p>
+    </div>
+
+
+
+<nav id="article-nav">
+  
+  
+    <a href="/2017/08/19/Tool/Git/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">Git速查手册</div>
+      <strong class="article-nav-caption">></strong>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+    <div id="toc" class="toc-article">
+    <strong class="toc-title">文章目录</strong>
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#概要"><span class="toc-number">1.</span> <span class="toc-text">概要</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#集中式工作流"><span class="toc-number">2.</span> <span class="toc-text">集中式工作流</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#工作方式"><span class="toc-number">2.1.</span> <span class="toc-text">工作方式</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Gitflow工作流"><span class="toc-number">3.</span> <span class="toc-text">Gitflow工作流</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#特点"><span class="toc-number">3.1.</span> <span class="toc-text">特点</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#工作方式-1"><span class="toc-number">3.2.</span> <span class="toc-text">工作方式</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#master版本分支"><span class="toc-number">3.2.1.</span> <span class="toc-text">master版本分支</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#develop开发分支"><span class="toc-number">3.2.2.</span> <span class="toc-text">develop开发分支</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#feature功能分支"><span class="toc-number">3.2.3.</span> <span class="toc-text">feature功能分支</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#案例"><span class="toc-number">3.2.3.1.</span> <span class="toc-text">案例</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#创建feature分支"><span class="toc-number">3.2.3.1.1.</span> <span class="toc-text">创建feature分支</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#编辑、暂存、提交"><span class="toc-number">3.2.3.1.2.</span> <span class="toc-text">编辑、暂存、提交</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#完成合并"><span class="toc-number">3.2.3.1.3.</span> <span class="toc-text">完成合并</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#release发布分支"><span class="toc-number">3.2.4.</span> <span class="toc-text">release发布分支</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#hotfixes修复分支"><span class="toc-number">3.2.5.</span> <span class="toc-text">hotfixes修复分支</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Forking工作流"><span class="toc-number">4.</span> <span class="toc-text">Forking工作流</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#冲突解决"><span class="toc-number">5.</span> <span class="toc-text">冲突解决</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#大幅度"><span class="toc-number">5.1.</span> <span class="toc-text">大幅度</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#拓展"><span class="toc-number">6.</span> <span class="toc-text">拓展</span></a></li></ol>
+</div>
+<input type="button" id="tocButton" value="隐藏目录"  title="点击按钮隐藏或者显示文章目录">
+
+<script src="https://7.url.cn/edu/jslib/comb/require-2.1.6,jquery-1.9.1.min.js"></script>
+<script>
+    var valueHide = "隐藏目录";
+    var valueShow = "显示目录";
+
+    if ($(".left-col").is(":hidden")) {
+        $("#tocButton").attr("value", valueShow);
+    }
+    $("#tocButton").click(function() {
+        if ($("#toc").is(":hidden")) {
+            $("#tocButton").attr("value", valueHide);
+            $("#toc").slideDown(320);
+        }
+        else {
+            $("#tocButton").attr("value", valueShow);
+            $("#toc").slideUp(350);
+        }
+    })
+    if ($(".toc").length < 1) {
+        $("#toc, #tocButton").hide();
+    }
+</script>
+
+
+
+
+
+<div class="bdsharebuttonbox">
+	<a href="#" class="fx fa-weibo bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
+	<a href="#" class="fx fa-weixin bds_weixin" data-cmd="weixin" title="分享到微信"></a>
+	<a href="#" class="fx fa-qq bds_sqq" data-cmd="sqq" title="分享到QQ好友"></a>
+	<a href="#" class="fx fa-facebook-official bds_fbook" data-cmd="fbook" title="分享到Facebook"></a>
+	<a href="#" class="fx fa-twitter bds_twi" data-cmd="twi" title="分享到Twitter"></a>
+	<a href="#" class="fx fa-linkedin bds_linkedin" data-cmd="linkedin" title="分享到linkedin"></a>
+	<a href="#" class="fx fa-files-o bds_copy" data-cmd="copy" title="分享到复制网址"></a>
+</div>
+<script>window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"2","bdSize":"24"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];</script>
+
+
+
+
+    
+        <div id="gitments"></div>
+<script src="/js/gitment.browser.js"></script>
+<script>
+    var gitment = new Gitment({
+      id: window.location.pathname,
+      owner: 'Jimmey-Jiang',
+      repo: 'Jimmey-Jiang.github.io',
+      oauth: {
+        client_id: '7f50019c6a02c37e7aca',
+        client_secret: 'd583910e6ae1492b375796d2c82efcda2cc67aae',
+      },
+    })
+    gitment.render('gitments')
+</script>
+    
+
+
+
+    <div class="scroll" id="post-nav-button">
+        
+            <a href="/" title="回到主页"><i class="fa fa-home"></i></a>
+        
+        <a title="文章列表"><i class="fa fa-bars"></i><i class="fa fa-times"></i></a>
+        
+            <a href="/2017/08/19/Tool/Git/" title="下一篇: Git速查手册">
+                <i class="fa fa-angle-right"></i>
+            </a>
+        
+    </div>
+    <ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2017/08/29/Tool/GitWorkflows/">Git Workflows</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/19/Tool/Git/">Git速查手册</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/18/FrontFrame/Vue/VueComponents/">Vue组件探秘</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/18/Induce/InduceSass/">深入Sass</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/18/FrontFrame/Vue/KeepAlive/">keep-alive最佳实践</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/18/Induce/CSS/CssLowFrequency/">CSS低频属性</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/02/Tool/Terminal/">Terminal配置</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/25/Induce/Weixin/JS-SDK/">WeChat SDK</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/12/Induce/Hack/Canvas/">浏览器常见Bug——Canvas</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/04/25/FrontFrame/Vue/Vuex/">Vuex</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/03/25/Induce/HTML/Video/">Mobile Video</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/03/25/FrontFrame/Vue/VueRouter/">Vue Router</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/03/21/Tool/Sublime/sublimeMac/">Sublime Mac 快捷键</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/02/14/FrontFrame/React/React/">React初探</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/01/02/Induce/CSS/CSSElementAlign/">用CSS实现元素垂直居中方案</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/12/31/Skill/norm/normCSS/">CSS前端代码规范</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/12/31/Skill/norm/normjs/">前端代码规范Javascript</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/12/31/Skill/norm/normhtml/">HTML前端代码规范</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/12/31/Skill/norm/normdev/">前端开发代码规范</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/12/27/FrontFrame/ReactNative/Components/RNCText/">React Native Text</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/12/27/FrontFrame/ReactNative/Components/RNCTextInput/">React Native TextInput</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/12/27/FrontFrame/ReactNative/Components/RNCImage/">React Native Image</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/12/27/FrontFrame/ReactNative/Components/RNComponents/">React Native 组件</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/12/26/FrontFrame/ReactNative/RNTest/">React Native 实战封装组件</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/12/26/FrontFrame/ReactNative/RNBasics/">React Native 基础</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/12/25/FrontFrame/ReactNative/RNSetOX/">React Native IOS环境搭建</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/12/25/FrontFrame/ReactNative/RNTools/">React Native开发工具</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/12/25/FrontFrame/ReactNative/RNSetAndroid/">React Native Android环境搭建（Window）</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/12/25/FrontFrame/ReactNative/RN/">React Native初探</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/05/08/Induce/Mobile/MobileGuide/">移动Web解决方案</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/04/02/Induce/JavaScript/JSInputSearch/">Input输入框的案例</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/04/02/Plug/Gulp/InduceGulp/">Gulp前端构建工具</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/04/02/Plug/Sublime/SublimeOmniMarkupPreviewer/">OmniMarkupPreviewer</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/04/02/Induce/HTML/HtmlRem/">移动H5自适应布局</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/03/02/Demo/TextShow/">BOOS信息展示与收缩</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/02/28/Demo/MobileRotate/">移动端横屏提示动画</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/02/27/Induce/Skill/OOCSS/">面向对象的CSS样式</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/02/27/Induce/Mobile/MobliePC/">关于移动端界面在PC端显示的实现</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/02/20/Induce/Node/NodeJsWeb/">Node.js实战 建立简单的Web服务器</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/02/20/Induce/CSS/animation/">CSS3动画探秘</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/01/28/Induce/Mobile/Mobile-knowledge/">移动前端知识总结</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/01/27/Induce/Ajax/Ajax/">Ajax学习计划</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/01/20/Plug/ChromePlug/">前端Chrome插件</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/01/19/Induce/JavaScript/JSTip/">原生JS TitleTip</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/01/19/Induce/Ajax/AjaxStatus/">Ajax Status请求状态</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/01/16/Interview/FrontMap/">【转】2015-2016前端知识体系</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/01/15/Induce/JavaScript/NativeJS/">原生JavaScript探索</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/01/13/Induce/HTML/HTMLbase/">HTML结构零散</a></li><li class="post-list-item"><a class="post-list-link" href="/2015/12/27/Hexo/GitHubHexo/">使用GitHub搭建Hexo博客</a></li><li class="post-list-item"><a class="post-list-link" href="/2015/12/27/Hexo/HexoBug/">Hexo bug</a></li><li class="post-list-item"><a class="post-list-link" href="/2015/12/27/Hexo/HexoPlug/">Hexo插件安装</a></li><li class="post-list-item"><a class="post-list-link" href="/2015/12/27/Hexo/Hexo/">Hexo的使用介绍</a></li><li class="post-list-item"><a class="post-list-link" href="/2015/12/27/Hexo/HexoTheme/">Hexo 主题：SPFK</a></li><li class="post-list-item"><a class="post-list-link" href="/2015/12/26/Skill/win7Set/">电脑优化相关</a></li><li class="post-list-item"><a class="post-list-link" href="/2015/12/25/Induce/CSS/CssTips/">CSS小技巧收藏</a></li><li class="post-list-item"><a class="post-list-link" href="/2015/12/25/Interview/WebFront/">web前端职业规划</a></li><li class="post-list-item"><a class="post-list-link" href="/2015/12/25/Induce/HTML/media/">响应式布局</a></li><li class="post-list-item"><a class="post-list-link" href="/2015/12/25/Induce/CSS/CSS/">CSS学习计划</a></li><li class="post-list-item"><a class="post-list-link" href="/2015/12/24/Tool/Sublime/Sublimemarkdown/">Markdown使用指南</a></li><li class="post-list-item"><a class="post-list-link" href="/2015/12/21/Tool/Sublime/Sublimebest/">Sublime Text历练</a></li><li class="post-list-item"><a class="post-list-link" href="/2015/12/21/Induce/JavaScript/JQueryCDN/">CDN公共库</a></li><li class="post-list-item"><a class="post-list-link" href="/2015/12/21/Plug/Sublime/SublimePackage/">Sublime插件</a></li><li class="post-list-item"><a class="post-list-link" href="/2015/12/21/Demohttps://tuchong.com/1496450//">前端资源导航</a></li><li class="post-list-item"><a class="post-list-link" href="/2015/12/11/Skill/BusyFront/">Busy前端工作室</a></li></ul>
+    <script src="https://7.url.cn/edu/jslib/comb/require-2.1.6,jquery-1.9.1.min.js"></script>
+    <script>
+        $(".post-list").addClass("toc-article");
+        $(".post-list-item a").attr("target","_blank");
+        $("#post-nav-button > a:nth-child(2)").click(function() {
+            $(".fa-bars, .fa-times").toggle();
+            $(".post-list").toggle(300);
+            if ($(".toc").length > 0) {
+                $("#toc, #tocButton").toggle(200, function() {
+                    if ($(".switch-area").is(":visible")) {
+                        $("#tocButton").attr("value", valueHide);
+                        }
+                    })
+            }
+            else {
+            }
+        })
+    </script>
+
+
+
+    <script>
+        
+    </script>
+</div>
+      <footer id="footer">
+    <div class="outer">
+        <div id="footer-info">
+            <div class="footer-left">
+                &copy; 2017 安与生
+            </div>
+            <div class="footer-right">
+                <a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/Jimmey-Jiang/hexo-theme-spfk" target="_blank">spfk</a> by Jimmey-Jiang
+            </div>
+        </div>
+        
+            <div class="visit">
+                
+                    <span id="busuanzi_container_site_pv" style='display:none'>
+                        <span id="site-visit" >海贼到访数: 
+                            <span id="busuanzi_value_site_uv"></span>
+                        </span>
+                    </span>
+                
+                
+                    <span>, </span>
+                
+                
+                    <span id="busuanzi_container_page_pv" style='display:none'>
+                        <span id="page-visit">本页阅读量: 
+                            <span id="busuanzi_value_page_pv"></span>
+                        </span>
+                    </span>
+                
+            </div>
+        
+    </div>
+</footer>
+
+    </div>
+    <script src="https://7.url.cn/edu/jslib/comb/require-2.1.6,jquery-1.9.1.min.js"></script>
+<script src="/js/main.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            var backgroundnum = 24;
+            var backgroundimg = "url(/background/bg-x.jpg)".replace(/x/gi, Math.ceil(Math.random() * backgroundnum));
+            $("#mobile-nav").css({"background-image": backgroundimg,"background-size": "cover","background-position": "center"});
+            $(".left-col").css({"background-image": backgroundimg,"background-size": "cover","background-position": "center"});
+        })
+    </script>
+
+
+
+
+	<script>
+	var _hmt = _hmt || [];
+	(function() {
+	  var hm = document.createElement("script");
+	  hm.src = "//hm.baidu.com/hm.js?819b1c6493df653afb8c7846bc4b8db6";
+	  var s = document.getElementsByTagName("script")[0]; 
+	  s.parentNode.insertBefore(hm, s);
+	})();
+	</script>
+
+
+<div class="scroll" id="scroll">
+    <a href="#"><i class="fa fa-arrow-up"></i></a>
+    <a href="#comments"><i class="fa fa-comments-o"></i></a>
+    <a href="#footer"><i class="fa fa-arrow-down"></i></a>
+</div>
+<script>
+    $(document).ready(function() {
+        if ($("#comments").length < 1) {
+            $("#scroll > a:nth-child(2)").hide();
+        };
+    })
+</script>
+
+<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+
+  <script language="javascript">
+    $(function() {
+        $("a[title]").each(function() {
+            var a = $(this);
+            var title = a.attr('title');
+            if (title == undefined || title == "") return;
+            a.data('title', title).removeAttr('title').hover(
+
+            function() {
+                var offset = a.offset();
+                $("<div id=\"anchortitlecontainer\"></div>").appendTo($("body")).html(title).css({
+                    top: offset.top - a.outerHeight() - 15,
+                    left: offset.left + a.outerWidth()/2 + 1
+                }).fadeIn(function() {
+                    var pop = $(this);
+                    setTimeout(function() {
+                        pop.remove();
+                    }, pop.text().length * 800);
+                });
+            }, function() {
+                $("#anchortitlecontainer").remove();
+            });
+        });
+    });
+</script>
+
+
+    <script type="text/javascript">
+      window.onload = function(){
+        document.getElementById("search").onclick = function(){
+            console.log("search")
+            search();
+        }
+      }
+      function search(){
+        (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+        (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+        e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+        })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+
+        _st('install','A1Pz-LKMXbrzcFg2FWi6','2.0.0');
+      }
+    </script>
+
+  </div>
+</body>
+</html>
