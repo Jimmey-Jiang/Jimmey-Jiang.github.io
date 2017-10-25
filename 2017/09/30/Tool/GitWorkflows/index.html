@@ -307,318 +307,125 @@
       
     
     <div class="article-entry" itemprop="articleBody">
-      
-        返回简书总目录:[ABP+AdminLTE+Bootstrap Table权限管理系统一期](http://www.jianshu.com/p/3851d663569e) 
-        前往博客园总目录:[ABP+AdminLTE+Bootstrap Table权限管理系统一期](http://www.cnblogs.com/anyushengcms/p/7325126.html)
-              第一点,上一篇文章中我们讲到codefirst中一些问题包括如图，codefirst在每次执行命令的时候会生成新的类，后来会越来越多。
-        ![](http://upload-images.jianshu.io/upload_images/6855212-e0c0e5cdaf5879a3.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
-        1,codefirst在执行的数据库迁移过程中产生了很多文件,对于强迫症的我而言特别不爽,这些其实是可以不用生成的。
-        2,在codefirst实际开发过程的冲突
-        3,每次增加一个表或者增删改一个字段都要去敲命令,好麻烦
-        4,数据库初始化的时候，不用把很多东西写入程序里面。
-        5,其实有时候报错不好找错误的原因
-        6,对于存储过程的执行，可以放到脚本里面。
-        7，菜单初始化，管理员等基础配置可以放到脚本里面。
-        8，对于已经建好的表，需要修改吗，增加，删除字段的时候我们可以用存储过程处理。可以写在脚本里面、
-        9.索引可以写在脚本里面。
-        10，还有其他包含数据库定时执行业务逻辑的作业之类的等等其他特点。
-        针对这些我在这个项目采用了以前get到的一种方法--脚本的方法去处理数据库
-                 第二点,abp module-zero里面的很多东西需要一定基础才能看懂,才能整明白,然后在新建项目的时候,我们并不希望而且不建议包含module-zero里面的内容.
-        针对以上我们到abp生成了下面的项目:
-        ![](http://upload-images.jianshu.io/upload_images/6855212-1cadcceb4ed7066c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
-           下面是我们生成包含module-zero的项目
-        ![](http://upload-images.jianshu.io/upload_images/6855212-f80519a7760d0fb8.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
-                 在JCmsErp新生成的里面我们看到,在Application层和Core层少了很多关于zero的业务逻辑和模型,初次在生成对很多人会造成困扰.
-                  此后我们以JCmsErp开始以后的项目.
-                  1,修改数据连接
-                  2,还原NuGet包
-        ![](http://upload-images.jianshu.io/upload_images/6855212-0a3aa3ffd96af5af.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
-              3,F5生成之后我们看到项目如下.
-        ![](http://upload-images.jianshu.io/upload_images/6855212-ee2742cffc42548e.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
-        项目生成成功之后，一切准备就绪，.开始进入正题,数据库脚本.
-        首先我们看一下abp自带的连接数据库的数据库上下文
-        ![](http://upload-images.jianshu.io/upload_images/6855212-0daffaa7b9445d35.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
-         
-          这里已经建好了自动获取数据库连接连接上方式的类
-         然后我们在它下面建一个获取数据库上下文的类ContextFactory，只是在ABP的基础上扩展出来的类。
-        ![](http://upload-images.jianshu.io/upload_images/6855212-0fe51e8900c26243.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
-         
-        里面获取上下文的类代码我已经写好.
-        ```
-        public class ContextFactory
-            {        /// <summary>
-                     /// 获取当前数据上下文
-                     /// </summary>
-                     /// <returns></returns>
-                public static JCMSDbContext GetCurrentContext()
-                {
-                    JCMSDbContext db = CallContext.GetData("Default") as JCMSDbContext;
-                    if (db == null)
-                    {
-                        db = new JCMSDbContext();
-                        CallContext.SetData("Default", db);
-                    }
-                    return db;
-                }
-        
-                public static void GetCurrentContextSetDatabaseExecuteSqlCommand(string FullName)
-                {
-                    JCMSDbContext db = CallContext.GetData("Default") as JCMSDbContext;
-                    db.Database.ExecuteSqlCommand(System.IO.File.ReadAllText(FullName, Encoding.Default));
-                }
-            }
-        ```
-         
-        为了做好准备工作,我们再在web目录下创建Data文件夹,在Data文件夹下建一个脚本Users
-        ![](http://upload-images.jianshu.io/upload_images/6855212-9616ad1377de9253.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
-         
-        在脚本里面添加数据库脚本.
-        ![](http://upload-images.jianshu.io/upload_images/6855212-852c171c692a87c7.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
-        做好了这些,然后我们在去home控制器里面添加ActionResult InitDataBase 并且添加InitDataBase 试图,在InitDataBase 里面写好简单样式按钮.
-        ![](http://upload-images.jianshu.io/upload_images/6855212-cf1b31734af61ec5.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
-        此处为了方便,我引了bootstrap-3.2.0的样式和js,看下出来页面
-        ![](http://upload-images.jianshu.io/upload_images/6855212-301a0db71caf2a26.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
-        什么,样子丑?样子丑就别管了,凑合凑合了...
-        注意上面按钮js执行的方法,指向控制器里面的方法,看下控制器的另一个方法,操作数据库的方法 
-        ![](http://upload-images.jianshu.io/upload_images/6855212-e6fa94d46740e1f2.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
-        CheckDatabase方法指向了连接数据库操作数据库的EntityFramework的方法,为了操作数据库,我在ContextFactory又添加了两个方法,看一下
-        ![](http://upload-images.jianshu.io/upload_images/6855212-b97c9be2d73498bd.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
-        然后点击InitDataBase页面的按钮,接下来就是见证奇迹的时刻了,奇迹就是本章的主题,根据脚本自动创建数据库了,来看下前后对面.
-        这里我已经把abp自带的数据库删除了，这是执行前的数据库。
-        ![](http://upload-images.jianshu.io/upload_images/6855212-5327af309282090a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
-        执行后user数据库就已经根据脚本自动生成数据库了。
-        ![](http://upload-images.jianshu.io/upload_images/6855212-7f9315c58b5c810e.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
-         
-        执行之后,我们创建表的语句就在数据库里面了.我们还可以在脚本里面写初始化需要的数据,
-        以后你会发现脚本有它强大的地方
-        1,初始化需要的管理员角色,
-        2,菜单
-        3,初始化需要的必须的数据
-        4,执行的存储过程
-        5,比如直接调用存储过程修改表的语句。
-        ```
-        call proc_update_field('course','audiences','longtext default null','');
-        call proc_add_field('course', 'picFileId', 'varchar(36) default null', ' comment ''上传图片文件Id'' after `isAutoNo`');
-        ```
-        6，比如索引的操作
-        
-        ```
-        drop procedure if exists del_idx;
-        create procedure del_idx(IN p_tablename varchar(50), IN p_idxname varchar(50))
-            comment '删除索引'
-        begin
-            set @schema_name = database();    
-            set @str=concat('drop index ',p_idxname,' on ', @schema_name, '.', p_tablename, ';');
-            select count(*) into @cnt from information_schema.statistics where TABLE_SCHEMA=@schema_name and table_name=p_tablename and index_name=p_idxname;
-        
-            if @cnt > 0 then
-                call excuteproc(@str);
-            end if;
-        end ;
-        ```
-        
-        7,对于大型的数据我们直接通过脚本直接操作数据库，不必通过底层orm框架。当然也可以abp在原有的基础上扩展
-          至此,第二章关于数据库脚本就写完了,其实涉及到的代码很简单，就是简单的数据操作。重要的是这种思想和扩展。还有很多功能没有展示在项目里面，包括索引扫描的，其实都可以自己去试一试的。最近比较忙，都没时间去写。
-        需要的可以去下载源码看一下：  项目GitHub地址:[https://github.com/Jimmey-Jiang/JCMS](https://github.com/Jimmey-Jiang/JCMS)
-         附上数据库代码:
-        ```
-        SET ANSI_NULLS ON;
-        GO
-        SET QUOTED_IDENTIFIER ON;
-        GO
-        CREATE TABLE [dbo].[Users]
-            (
-              [Id] [INT] IDENTITY(1, 1)
-                         NOT NULL ,
-              [UserName] [NVARCHAR](20) NOT NULL ,
-              [Password] [NVARCHAR](32) NOT NULL ,
-              [Email] [NVARCHAR](50) NOT NULL ,
-              [Phone] [NVARCHAR](50) NULL ,
-              [Address] [NVARCHAR](300) NULL ,
-              [UpdateDate] [DATETIME] NOT NULL ,
-              [TrueName] [NVARCHAR](20) NOT NULL ,
-              [Enabled] [BIT] NOT NULL ,
-              [CreationTime] [DATETIME] NULL ,
-              [IsDeleted] [BIT] NULL ,
-              [CreatorUserId] [NVARCHAR](20) NULL ,
-              [LastModificationTime] [DATETIME] NULL
-            )
-        ON  [PRIMARY];
-        
-        GO
-        SET IDENTITY_INSERT [dbo].[Users] ON; 
-        
-        GO
-        INSERT  [dbo].[Users]
-                ( [id] ,
-                  [UserName] ,
-                  [Password] ,
-                  [Email] ,
-                  [Phone] ,
-                  [Address] ,
-                  [UpdateDate] ,
-                  [TrueName] ,
-                  [Enabled] ,
-                  [CreationTime] ,
-                  [IsDeleted] ,
-                  [CreatorUserId] ,
-                  [LastModificationTime]
-                )
-        VALUES  ( 1 ,
-                  N'admin' ,
-                  N'123456' ,
-                  N'2181130@qq.com' ,
-                  N'156156156156156' ,
-                  N'深圳' ,
-                  CAST(0x0000A7C000000000 AS DATETIME) ,
-                  N'admin' ,
-        ,
-                  CAST(0x0000A7C000000000 AS DATETIME) ,
-        ,
-                  N'1' ,
-                  CAST(0x0000A7C000000000 AS DATETIME)
-                );
-        GO
-        SET IDENTITY_INSERT [dbo].[Users] OFF;
-        GO
-        ```
-        
-        InitDataBase页面代码：
-        ```
-        @{
-            ViewBag.Title = "InitDataBase";
-        }
-        
-        <!DOCTYPE html>
-        <html>
-        <head>
-            <title>JCMS安装程序</title>
-            <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-            <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-            <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-            <link href="~/Scripts/bootstrap-3.2.0/css/bootstrap.css" rel="stylesheet" />
-            <link href="~/Scripts/bootstrap-3.2.0/css/install.css" rel="stylesheet" />
-        </head>
-        <body>
-            <div class="install-container">
-                <div class="paper">
-                    <div class="paper-heading">
-                        <h1>
-                            <span class="brand">JCMS</span> <span class="text-muted">安装向导</span>
-                        </h1>
-                    </div>
-                    <div class="paper-body">
-                        <div class="actions">
-                            <button id="btnInit" class="btn btn-default">
-                                初始化数据
-                            </button>
-                            <div id="info">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <script src="~/Scripts/jquery-2.1.4.js"></script>
-            <script src="~/Scripts/jquery-2.1.4.min.js"></script>
-            <script src="~/Scripts/bootstrap.js"></script>
-            <script type="text/javascript">
-                $("#btnInit").click(function () {
-                    $(this).attr("disabled", "disabled");
-                    $(this).next().text("正在初始化数据......");
-        
-                    var btnInit = $(this).next();
-                    var lbTip = $(this).next();
-                    $.ajax({
-                        url: '/Home/CheckDatabase',
-                        success: function (data) {
-                            if (data.success) {
-                               // $.messager.alert('提示', '操作成功！请重启站点！');
-                                window.location = "/Home/Login";
-                            } else {
-                                alert('操作失败！请查看日志！');
-                            }
-                        },
-                        error: function () {
-                            alert('初始化数据失败！');
-                        },
-                        complete: function () {
-                            $.messager.progress('close');
-                        }
-                    });
-                });
-            </script>
-        </body>
-        </html>
-        ```
-        
-         HomeController代码：
-        
-        ```
-        private JCMSDbContext db = ContextFactory.GetCurrentContext();
-        
-                [DisableAbpAntiForgeryTokenValidation]
-                [HttpGet]
-                [DontWrapResult]
-                public ActionResult Login()
-                {
-                    return View();
-                }
-        
-        
-                public ActionResult InitDataBase()
-                {
-                    return View();
-                }
-        
-                //初始化
-                public JsonResult CheckDatabase()
-                {
-                    // db.Users
-        
-                    var success = true;
-        
-                    List<FileInfo> list = new List<FileInfo>();
-                    foreach (var item in Directory.GetFiles(AppDomain.CurrentDomain.BaseDirectory + "Data"))
-                    {
-                        list.Add(new FileInfo(item));
-                    }
-                    var item0 = (from e in list where e.Name != "procedure.sql" select new { e.FullName, e.Name }).FirstOrDefault();
-                    try
-                    {
-        
-                        var items = from e in list where e.Name != "procedure.sql" && e.Name != "nv_folder.sql" && e.Name != "index.sql" && e.Extension == ".sql" select new { e.FullName, e.Name };
-                        foreach (var item in items)
-                        {
-                            try
-                            {
-                                ContextFactory.GetCurrentContextSetDatabaseExecuteSqlCommand(item.FullName);
-                            }
-                            catch (Exception ex)
-                            {
-                                success = false;
-                                Logger.Error("脚本" + item.Name + "：" + ex);
-                            }
-                        }
-        
-                    }
-                    catch (Exception ex)
-                    {
-                        success = false;
-                        Logger.Error("脚本" + item0.Name + "：" + ex);
-                    }
-        
-        
-        
-                    return Json(new { success = success }, JsonRequestBehavior.AllowGet);
-                }
-        ```
-        
-         
-         
-        返回简书总目录:[ABP+AdminLTE+Bootstrap Table权限管理系统一期](http://www.jianshu.com/p/3851d663569e) 
-        前往博客园总目录:[ABP+AdminLTE+Bootstrap Table权限管理系统一期](http://www.cnblogs.com/anyushengcms/p/7325126.html)
-        
+      <div data-note-content="" class="show-content">
+          <h2>比较全面的c#帮助类</h2>
+<p>日常工作总结，加上网上收集，各式各样的几乎都能找到,所有功能性代码都是独立的类，类与类之间没有联系，可以单独引用至项目，分享出来，方便大家，几乎都有注释，喜欢的请点赞，不断完善收集中...</p>
+<h2>总揽</h2>
+<div class="image-package">
+<img src="//upload-images.jianshu.io/upload_images/6855212-26b0b78fc2743d1d.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" data-original-src="http://upload-images.jianshu.io/upload_images/6855212-26b0b78fc2743d1d.png?imageMogr2/auto-orient/strip" alt="2.png" style="cursor: zoom-in;"><br><div class="image-caption">2.png</div>
+</div>
+<h2>主干是Utility基础类大全</h2>
+<p>比较详细，这里是重点，花了一些时间</p>
+<br>
+<div class="image-package">
+<img src="//upload-images.jianshu.io/upload_images/6855212-fd64cd5f294f1967.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" data-original-src="http://upload-images.jianshu.io/upload_images/6855212-fd64cd5f294f1967.png?imageMogr2/auto-orient/strip" alt="20171011.png" style="cursor: zoom-in;"><br><div class="image-caption">20171011.png</div>
+</div>
+<h2>在平时的工作中，或多或少会涉及到帮助类</h2>
+<p>最常见的上传下载文件，excel，sqlhelper,等等，我相信很多对大家来说都不难， 但是如果什么都重头去写的话，确实很浪费时间，如果有比较全面的帮助类，我需要什么就能找到该多好，我现在做的就是收集尽量多的帮助类，方便日后用到。</p>
+<h2>样板图片操作类</h2>
+<div class="image-package">
+<img src="//upload-images.jianshu.io/upload_images/6855212-34f0ee0339e3cb49.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" data-original-src="http://upload-images.jianshu.io/upload_images/6855212-34f0ee0339e3cb49.png?imageMogr2/auto-orient/strip" alt="WEFE@M%}SN4_K$6H0D{6IYJ.png" style="cursor: zoom-in;"><br><div class="image-caption">WEFE@M%}SN4_K$6H0D{6IYJ.png</div>
+</div>
+<h2>操作文档</h2>
+<p>里面包含一下操作文档，这个是用工具生成的。还在研究中...</p>
+<br>
+<div class="image-package">
+<img src="//upload-images.jianshu.io/upload_images/6855212-6cf5a7a2a4a75c89.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" data-original-src="http://upload-images.jianshu.io/upload_images/6855212-6cf5a7a2a4a75c89.png?imageMogr2/auto-orient/strip" alt="H819EQUYFVA~WXK6YAQ1%6Q.png" style="cursor: zoom-in;"><br><div class="image-caption">H819EQUYFVA~WXK6YAQ1%6Q.png</div>
+</div>
+<h2>附上一些常见的帮助类栏目</h2>
+<ol>
+<li>cookie操作 --------- CookieHelper.cs</li>
+<li>session操作 ------- SessionHelper.cs</li>
+<li>cache操作</li>
+<li>ftp操作</li>
+<li>http操作 ------------ HttpHelper.cs</li>
+<li>json操作 ------------ JsonHelper.cs</li>
+<li>xml操作 ------------- XmlHelper.cs</li>
+<li>Excel操作</li>
+<li>Sql操作 ------------- SqlHelper.cs</li>
+<li>类型转换 ------------ Converter.cs</li>
+<li>加密解密 ------------ EncryptHelper.cs</li>
+<li>邮件发送    ------------ MailHelper.cs</li>
+<li>二维码</li>
+<li>汉字转拼音</li>
+<li>计划任务    ------------ IntervalTask.cs</li>
+<li>信息配置 ------------ Setting.cs</li>
+<li>上传下载配置文件操作类</li>
+<li>视频转换</li>
+<li>图片操作</li>
+<li>验证码生成</li>
+<li>String拓展 ---------- StringExtension.cs</li>
+<li>正则表达式 --------- RegexHelper.cs</li>
+<li>分页操作</li>
+<li>UBB编码</li>
+<li>Url重写</li>
+<li>Object拓展 --------- ObjectExtension.cs</li>
+<li>Stream的拓展   ------ StreamExtension.cs</li>
+<li>CSV文件转换</li>
+<li>Chart图形</li>
+<li>H5-微信</li>
+<li>PDF</li>
+<li>分词辅助类</li>
+<li>序列化</li>
+<li>异步线程</li>
+<li>弹出消息类</li>
+<li>文件操作类</li>
+<li>日历</li>
+<li>日志</li>
+<li>时间操作类</li>
+<li>时间戳</li>
+<li>条形码</li>
+<li>正则表达式</li>
+<li>汉字转拼音</li>
+<li>网站安全</li>
+<li>网络</li>
+<li>视频转换类</li>
+<li>计划任务</li>
+<li>配置文件操作类</li>
+<li>阿里云</li>
+<li>随机数类</li>
+<li>页面辅助类</li>
+<li>验证码</li>
+<li>Mime</li>
+<li>Net</li>
+<li>NPOI</li>
+<li>obj</li>
+<li>Path</li>
+<li>Properties</li>
+<li>ResourceManager</li>
+<li>URL的操作类</li>
+<li>VerifyCode</li>
+<li>处理多媒体的公共类</li>
+<li>各种验证帮助类</li>
+<li>分页</li>
+<li>计划任务</li>
+<li>配置文件操作类</li>
+<li>分词辅助类</li>
+<li>IP辅助类</li>
+<li>Html操作类</li>
+<li>其他</li>
+</ol>
+<h2>github地址</h2>
+<p>最后老规矩，<a href="https://github.com/Jimmey-Jiang/Common.Utility.git" target="_blank">github地址</a> <a href="https://github.com/Jimmey-Jiang/Common.Utility.git" target="_blank">https://github.com/Jimmey-Jiang/Common.Utility.git</a>求star,喜欢点赞</p>
+<h2>里面的操作类都很详细，基本都有注释</h2>
+<p>比如这里展示一下 字符串操作帮助类就有下面这个方法：<br>
+1、GetStrArray(string str, char speater, bool toLower) 把字符串按照分隔符转换成 List<br>
+2、GetStrArray(string str) 把字符串转 按照, 分割 换为数据<br>
+3、GetArrayStr(List list, string speater) 把 List 按照分隔符组装成 string<br>
+4、GetArrayStr(List list) 得到数组列表以逗号分隔的字符串<br>
+5、GetArrayValueStr(Dictionary&lt;int, int&gt; list)得到数组列表以逗号分隔的字符串<br>
+6、DelLastComma(string str)删除最后结尾的一个逗号<br>
+7、DelLastChar(string str, string strchar)删除最后结尾的指定字符后的字符<br>
+8、ToSBC(string input)转全角的函数(SBC case)<br>
+9、ToDBC(string input)转半角的函数(SBC case)<br>
+10、GetSubStringList(string o_str, char sepeater)把字符串按照指定分隔符装成 List 去除重复<br>
+11、GetCleanStyle(string StrList, string SplitString)将字符串样式转换为纯字符串<br>
+12、GetNewStyle(string StrList, string NewStyle, string SplitString, out string Error)将字符串转换为新样式<br>
+13、SplitMulti(string str, string splitstr)分割字符串<br>
+14、SqlSafeString(string String, bool IsDel)<br>
+另外,主要参考<a href="https://gitee.com/kuiyu/dotnetcodes" target="_blank">https://gitee.com/kuiyu/dotnetcodes</a>，并在其基础上扩展</p>
 
+        </div>
       
       
         <div class="page-reward">
