@@ -278,7 +278,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2017/08/29/Tool/GitWorkflows/">Git Workflows</a>
+      <a class="article-title" href="/2017/08/29/Tool/GitWorkflows/">比较全面的c#帮助类</a>
     </h1>
   
 
@@ -287,16 +287,23 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-          
-              <h1 id="概要"><a href="#概要" class="headerlink" title="概要"></a>概要</h1><p>随着团队不断的壮大，业务流程迭代。代码工作流的规范是显而易见的。为了保证开发速度，我们不断改进完善这个发布流程，让这个过程更简单、高效。<br>这篇指南以大家在SVN中已经广为熟悉使用的集中式工作流作为起点，循序渐进地演进到其它高效的分布式工作流，还介绍了如何配合使用便利的Pull Request功能，体系地讲解了各种工作流的应用。<br>在阅读过程中，请记住这些工作流是指导原则，而不是具体规则。我们想向您展示什么是可能的，因此您可以混合和匹配来自不同工作流的方面，以满足您的个人需求。</p>
-<p>常见问题：</p>
-<ol>
-<li>我们以使用SVN的工作流来使用Git有什么不妥？</li>
-<li>如何控制开发版本？</li>
-<li>Git方便的branch在哪里，团队多人如何协作？冲突了怎么办？如何进行发布控制？</li>
-<li>经典的master-发布、develop-主开发、hotfix-bug修复如何避免代码不经过验证上线？</li>
-<li>如何在GitHub上面与他人一起协作，star-fork-pull request是怎样的流程？
-          
+           <h1 id="概要"><a href="#概要" class="headerlink" title="概要"></a>概要</h1><p>日常工作总结，加上网上收集，各式各样的几乎都能找到,所有功能性代码都是独立的类，类与类之间没有联系，可以单独引用至项目，分享出来，方便大家，几乎都有注释，喜欢的请点赞，不断完善收集中...</p>
+              <h2>里面的操作类都很详细，基本都有注释</h2>
+              <p>比如这里展示一下 字符串操作帮助类就有下面这个方法：<br>
+              1、GetStrArray(string str, char speater, bool toLower) 把字符串按照分隔符转换成 List<br>
+              2、GetStrArray(string str) 把字符串转 按照, 分割 换为数据<br>
+              3、GetArrayStr(List list, string speater) 把 List 按照分隔符组装成 string<br>
+              4、GetArrayStr(List list) 得到数组列表以逗号分隔的字符串<br>
+              5、GetArrayValueStr(Dictionary&lt;int, int&gt; list)得到数组列表以逗号分隔的字符串<br>
+              6、DelLastComma(string str)删除最后结尾的一个逗号<br>
+              7、DelLastChar(string str, string strchar)删除最后结尾的指定字符后的字符<br>
+              8、ToSBC(string input)转全角的函数(SBC case)<br>
+              9、ToDBC(string input)转半角的函数(SBC case)<br>
+              10、GetSubStringList(string o_str, char sepeater)把字符串按照指定分隔符装成 List 去除重复<br>
+              11、GetCleanStyle(string StrList, string SplitString)将字符串样式转换为纯字符串<br>
+              12、GetNewStyle(string StrList, string NewStyle, string SplitString, out string Error)将字符串转换为新样式<br>
+              13、SplitMulti(string str, string splitstr)分割字符串<br>
+              14、SqlSafeString(string String, bool IsDel)<br>
       
       
     </div>
@@ -351,7 +358,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2017/08/19/Tool/Git/">Git速查手册</a>
+      <a class="article-title" href="/2017/08/19/Tool/Git/">ABP+AdminLTE+Bootstrap Table权限管理系统一期</a>
     </h1>
   
 
@@ -360,13 +367,14 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-          
-              <h1 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h1><h2 id="Linux"><a href="#Linux" class="headerlink" title="Linux"></a>Linux</h2><p>打开控制台，然后通过包管理安装，在Ubuntu上命令是：<br><figure class="highlight q"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo apt-<span class="built_in">get</span> install git-<span class="built_in">all</span></div></pre></td></tr></table></figure></p>
-<h2 id="Windows"><a href="#Windows" class="headerlink" title="Windows"></a>Windows</h2><p>推荐使用git for<br>windows，它包括了图形工具以及命令行模拟器。</p>
-<h2 id="OS-X"><a href="#OS-X" class="headerlink" title="OS X"></a>OS X</h2><p>最简单的方式是使用homebrew安装，命令行执行<br><figure class="highlight mipsasm"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">brew </span><span class="keyword">install </span>git</div></pre></td></tr></table></figure></p>
-<p>如果你是在是先用图形工具的话，那么推荐你使用Github desktop,Sourcetree。但我还是推荐你使用命令行，下面的内容就都是命令行的。<br>
-          
-      
+    <p>
+        学而时习之,不亦说乎,温顾温知新,可以为师矣.
+        看懂远不如动手去做,动手做才能发现很多自己不懂的问题,不断的反思和总结,“乐于分享是一种境界的突破”。" 分享是很有意思，也是可以锻炼人的。分享意味着自我的不断净化提升，不给自己后退的余地。为什么这么说呢？因为：一，分享的就是你所知道的，你所知道的是你投资时间和精力学来的，分享意味着你做到无私地把它分享出更高的价值，这是很伟大的。二，分享意味着你要不断去追寻新知，这很重要。只有用心生活，用心体会，才能不断有新的东西分享。这就是善于借用外力来完善自己的表现。。三，我们在分享的过程中，学会进一步判断，进一步深入思考，从而进一步提升思绪。这很重要，自己要了解自己，这是一个不断学习的过程。"
+        这也是算是一种学习的方法和态度吧,经常去学习和总结,在博客园看了很多大神的文章,写下一点对于ABP(ABP是“ASP.NET Boilerplate Project (ASP.NET样板项目)”的简称)框架的理解和运用.能力有限,第一次写技术性的博客写得不好.算是抛砖引玉,希望有问题的地方给予指出.
+        "ASP.NET Boilerplate是一个用最佳实践和流行技术开发现代WEB应用程序的新起点，它旨在成为一个通用的WEB应用程序框架和项目模板。"
+        "ASP.NET Boilerplate 基于DDD的经典分层架构思想，实现了众多DDD的概念（但没有实现所有DDD的概念）。"
+        ABP在中国火了有一段时间了,我算是添柴加火吧.
+    </p>  
       
     </div>
     
