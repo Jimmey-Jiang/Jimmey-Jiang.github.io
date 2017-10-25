@@ -308,62 +308,125 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-          
-        <h1 id="概要"><a href="#概要" class="headerlink" title="概要"></a>概要</h1><p>随着团队不断的壮大，业务流程迭代。代码工作流的规范是显而易见的。为了保证开发速度，我们不断改进完善这个发布流程，让这个过程更简单、高效。<br>这篇指南以大家在SVN中已经广为熟悉使用的集中式工作流作为起点，循序渐进地演进到其它高效的分布式工作流，还介绍了如何配合使用便利的Pull Request功能，体系地讲解了各种工作流的应用。<br>在阅读过程中，请记住这些工作流是指导原则，而不是具体规则。我们想向您展示什么是可能的，因此您可以混合和匹配来自不同工作流的方面，以满足您的个人需求。</p>
-<p>常见问题：</p>
+     <div data-note-content="" class="show-content">
+          <h2>比较全面的c#帮助类</h2>
+<p>日常工作总结，加上网上收集，各式各样的几乎都能找到,所有功能性代码都是独立的类，类与类之间没有联系，可以单独引用至项目，分享出来，方便大家，几乎都有注释，喜欢的请点赞，不断完善收集中...</p>
+<h2>总揽</h2>
+<div class="image-package">
+<img src="//upload-images.jianshu.io/upload_images/6855212-26b0b78fc2743d1d.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" data-original-src="http://upload-images.jianshu.io/upload_images/6855212-26b0b78fc2743d1d.png?imageMogr2/auto-orient/strip" alt="2.png" style="cursor: zoom-in;"><br><div class="image-caption">2.png</div>
+</div>
+<h2>主干是Utility基础类大全</h2>
+<p>比较详细，这里是重点，花了一些时间</p>
+<br>
+<div class="image-package">
+<img src="//upload-images.jianshu.io/upload_images/6855212-fd64cd5f294f1967.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" data-original-src="http://upload-images.jianshu.io/upload_images/6855212-fd64cd5f294f1967.png?imageMogr2/auto-orient/strip" alt="20171011.png" style="cursor: zoom-in;"><br><div class="image-caption">20171011.png</div>
+</div>
+<h2>在平时的工作中，或多或少会涉及到帮助类</h2>
+<p>最常见的上传下载文件，excel，sqlhelper,等等，我相信很多对大家来说都不难， 但是如果什么都重头去写的话，确实很浪费时间，如果有比较全面的帮助类，我需要什么就能找到该多好，我现在做的就是收集尽量多的帮助类，方便日后用到。</p>
+<h2>样板图片操作类</h2>
+<div class="image-package">
+<img src="//upload-images.jianshu.io/upload_images/6855212-34f0ee0339e3cb49.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" data-original-src="http://upload-images.jianshu.io/upload_images/6855212-34f0ee0339e3cb49.png?imageMogr2/auto-orient/strip" alt="WEFE@M%}SN4_K$6H0D{6IYJ.png" style="cursor: zoom-in;"><br><div class="image-caption">WEFE@M%}SN4_K$6H0D{6IYJ.png</div>
+</div>
+<h2>操作文档</h2>
+<p>里面包含一下操作文档，这个是用工具生成的。还在研究中...</p>
+<br>
+<div class="image-package">
+<img src="//upload-images.jianshu.io/upload_images/6855212-6cf5a7a2a4a75c89.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" data-original-src="http://upload-images.jianshu.io/upload_images/6855212-6cf5a7a2a4a75c89.png?imageMogr2/auto-orient/strip" alt="H819EQUYFVA~WXK6YAQ1%6Q.png" style="cursor: zoom-in;"><br><div class="image-caption">H819EQUYFVA~WXK6YAQ1%6Q.png</div>
+</div>
+<h2>附上一些常见的帮助类栏目</h2>
 <ol>
-<li>我们以使用SVN的工作流来使用Git有什么不妥？</li>
-<li>如何控制开发版本？</li>
-<li>Git方便的branch在哪里，团队多人如何协作？冲突了怎么办？如何进行发布控制？</li>
-<li>经典的master-发布、develop-主开发、hotfix-bug修复如何避免代码不经过验证上线？</li>
-<li>如何在GitHub上面与他人一起协作，star-fork-pull request是怎样的流程？<a id="more"></a>
-</li>
+<li>cookie操作 --------- CookieHelper.cs</li>
+<li>session操作 ------- SessionHelper.cs</li>
+<li>cache操作</li>
+<li>ftp操作</li>
+<li>http操作 ------------ HttpHelper.cs</li>
+<li>json操作 ------------ JsonHelper.cs</li>
+<li>xml操作 ------------- XmlHelper.cs</li>
+<li>Excel操作</li>
+<li>Sql操作 ------------- SqlHelper.cs</li>
+<li>类型转换 ------------ Converter.cs</li>
+<li>加密解密 ------------ EncryptHelper.cs</li>
+<li>邮件发送    ------------ MailHelper.cs</li>
+<li>二维码</li>
+<li>汉字转拼音</li>
+<li>计划任务    ------------ IntervalTask.cs</li>
+<li>信息配置 ------------ Setting.cs</li>
+<li>上传下载配置文件操作类</li>
+<li>视频转换</li>
+<li>图片操作</li>
+<li>验证码生成</li>
+<li>String拓展 ---------- StringExtension.cs</li>
+<li>正则表达式 --------- RegexHelper.cs</li>
+<li>分页操作</li>
+<li>UBB编码</li>
+<li>Url重写</li>
+<li>Object拓展 --------- ObjectExtension.cs</li>
+<li>Stream的拓展   ------ StreamExtension.cs</li>
+<li>CSV文件转换</li>
+<li>Chart图形</li>
+<li>H5-微信</li>
+<li>PDF</li>
+<li>分词辅助类</li>
+<li>序列化</li>
+<li>异步线程</li>
+<li>弹出消息类</li>
+<li>文件操作类</li>
+<li>日历</li>
+<li>日志</li>
+<li>时间操作类</li>
+<li>时间戳</li>
+<li>条形码</li>
+<li>正则表达式</li>
+<li>汉字转拼音</li>
+<li>网站安全</li>
+<li>网络</li>
+<li>视频转换类</li>
+<li>计划任务</li>
+<li>配置文件操作类</li>
+<li>阿里云</li>
+<li>随机数类</li>
+<li>页面辅助类</li>
+<li>验证码</li>
+<li>Mime</li>
+<li>Net</li>
+<li>NPOI</li>
+<li>obj</li>
+<li>Path</li>
+<li>Properties</li>
+<li>ResourceManager</li>
+<li>URL的操作类</li>
+<li>VerifyCode</li>
+<li>处理多媒体的公共类</li>
+<li>各种验证帮助类</li>
+<li>分页</li>
+<li>计划任务</li>
+<li>配置文件操作类</li>
+<li>分词辅助类</li>
+<li>IP辅助类</li>
+<li>Html操作类</li>
+<li>其他</li>
 </ol>
-<h1 id="集中式工作流"><a href="#集中式工作流" class="headerlink" title="集中式工作流"></a>集中式工作流</h1><p>集中式工作流以中央仓库作为项目所有修改的单点实体。相比 SVN 缺省的开发分支 trunk ，Git 叫做master，所有修改提交到这个分支上。本工作流只用到 master 这一个分支。<br><img src="http://wiki.jikexueyuan.com/project/git-workflow-tutorial/images/git-workflow-svn.png" alt="集中式工作流"></p>
-<h2 id="工作方式"><a href="#工作方式" class="headerlink" title="工作方式"></a>工作方式</h2><p>要发布修改到正式项目中，开发者要把本地 master 分支的修改『推』到中央仓库中。这相当于 svn commit 操作，但 push 操作会把所有还不在中央仓库的本地提交都推上去。</p>
-<p><img src="http://wiki.jikexueyuan.com/project/git-workflow-tutorial/images/git-workflow-svn-push-local.png" alt="push"></p>
-<h1 id="Gitflow工作流"><a href="#Gitflow工作流" class="headerlink" title="Gitflow工作流"></a>Gitflow工作流</h1><!-- ![Git Workflows](http://nvie.com/img/git-model@2x.png) -->
-<p>Gitflow工作流通过为功能开发、发布准备和维护分配独立的分支，让发布迭代过程更流畅。严格的分支模型也为大型项目提供了一些非常必要的结构。<br><!-- ![Gitflow](http://wiki.jikexueyuan.com/project/git-workflow-tutorial/images/git-workflows-gitflow.png) --></p>
-<h2 id="特点"><a href="#特点" class="headerlink" title="特点"></a>特点</h2><ol>
-<li>健壮的用于管理大型项目的框架</li>
-<li>分支分配明确</li>
-<li>功能分支，在做准备、维护和记录发布也使用各自的分支</li>
-</ol>
-<h2 id="工作方式-1"><a href="#工作方式-1" class="headerlink" title="工作方式"></a>工作方式</h2><p>Gitflow工作流仍然用中央仓库作为所有开发者的交互中心。和其它的工作流一样，开发者在本地工作并push分支到要中央仓库中。</p>
-<p>分支命名：<code>master</code>版本、<code>develop</code>开发、<code>release-*</code>发布、<code>feature-*</code>功能、<code>hotfix-*</code>修复</p>
-<blockquote>
-<p>特点</p>
-</blockquote>
-<figure class="highlight crmsh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">├── <span class="keyword">master</span></div><div class="line">	<span class="title">├── hotfix-</span>*</div><div class="line">	├── release-*</div><div class="line">	├── develop</div><div class="line">		├── hotfix-*</div><div class="line">		├── release-*</div><div class="line">		├── feature-*</div></pre></td></tr></table></figure>
-<p><img src="https://wac-cdn.atlassian.com/dam/jcr:21cf772d-2ba5-4686-8259-fcd6fd2311df/05.svg?cdnVersion=fn" alt="维护分支"></p>
-<h3 id="master版本分支"><a href="#master版本分支" class="headerlink" title="master版本分支"></a>master版本分支</h3><p><img src="https://wac-cdn.atlassian.com/dam/jcr:e3bd4199-27ac-4bac-a5d2-3ff0fdb112d3/01.svg?cdnVersion=fn" alt=""><br>正式发布历史分支：用于管理发布的版本，发布Tag</p>
-<h3 id="develop开发分支"><a href="#develop开发分支" class="headerlink" title="develop开发分支"></a>develop开发分支</h3><p><img src="https://wac-cdn.atlassian.com/dam/jcr:2e2315b0-d79a-403f-a981-4cb94599df1f/02.svg?cdnVersion=fn" alt=""><br>功能的集成分支：用于开发项目</p>
-<h3 id="feature功能分支"><a href="#feature功能分支" class="headerlink" title="feature功能分支"></a>feature功能分支</h3><p><img src="https://wac-cdn.atlassian.com/dam/jcr:9f149cef-f784-43de-8207-3e7968789a1f/03.svg?cdnVersion=fn" alt=""><br>功能分支：每个新功能位于一个自己的分支，这样可以push到中央仓库以备份和协作。<br>新功能提交应该从不直接与master分支交互，</p>
-<h4 id="案例"><a href="#案例" class="headerlink" title="案例"></a>案例</h4><p>小红和小明开始各自的功能开发。他们需要为各自的功能创建相应的分支。新分支不是基于master分支，而是应该基于develop分支进行开发<br><img src="https://wac-cdn.atlassian.com/dam/jcr:57829b6b-1e6d-40ea-a15a-1a2fe6bf80f6/07.svg?cdnVersion=fn" alt=""></p>
-<h5 id="创建feature分支"><a href="#创建feature分支" class="headerlink" title="创建feature分支"></a>创建feature分支</h5><figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="comment">&lt;!-- develop分支 --&gt;</span></div><div class="line">$ git checkout develop</div><div class="line"></div><div class="line"><span class="comment">&lt;!-- 创建dev分支并切换 --&gt;</span></div><div class="line">$ git checkout -b feature-dev</div><div class="line">Switched to branch 'feature-dev'</div><div class="line"></div><div class="line">=&gt;</div><div class="line"><span class="comment">&lt;!-- 以develop创建dev分支并切换 --&gt;</span></div><div class="line">git checkout -b feature-dev develop</div></pre></td></tr></table></figure>
-<h5 id="编辑、暂存、提交"><a href="#编辑、暂存、提交" class="headerlink" title="编辑、暂存、提交"></a>编辑、暂存、提交</h5><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="meta">$</span><span class="bash"> git status</span></div><div class="line"><span class="meta">$</span><span class="bash"> git add</span></div><div class="line"><span class="meta">$</span><span class="bash"> git commit -m <span class="string">"branch"</span></span></div><div class="line">[feature-dev fec145a] branch</div><div class="line"> 1 file changed, 1 insertion(+)</div><div class="line"><span class="meta">$</span><span class="bash"> git push</span></div></pre></td></tr></table></figure>
-<h5 id="完成合并"><a href="#完成合并" class="headerlink" title="完成合并"></a>完成合并</h5><figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="comment">&lt;!-- 拉取develop代码并合并 --&gt;</span></div><div class="line">$ git pull origin develop</div><div class="line">$ git checkout develop</div><div class="line"></div><div class="line"><span class="comment">&lt;!-- 合并指定分支到feature-dev分支 --&gt;</span></div><div class="line">$ git merge feature-dev</div><div class="line">$ git push</div><div class="line"></div><div class="line"><span class="comment">&lt;!-- 删除分支 --&gt;</span></div><div class="line">$ git branch -d feature-dev</div></pre></td></tr></table></figure>
-<h3 id="release发布分支"><a href="#release发布分支" class="headerlink" title="release发布分支"></a>release发布分支</h3><p><img src="https://wac-cdn.atlassian.com/dam/jcr:3555a856-675e-453a-b49d-ba60667809e1/04.svg?cdnVersion=fn" alt=""><br>发布分支：用于发布准备的专门分支。<br>一旦develop分支上有了做一次发布（或者说快到了既定的发布日）的足够功能，就从develop分支上fork一个发布分支。新建的分支用于开始发布循环，所以从这个时间点开始之后新的功能不能再加到这个分支上 —— 这个分支只应该做Bug修复、文档生成和其它面向发布任务。<br>一旦对外发布的工作都完成了，发布分支合并到master分支并分配一个版本号打好Tag。另外，这些从新建发布分支以来的做的修改要合并回develop分支。</p>
-<h3 id="hotfixes修复分支"><a href="#hotfixes修复分支" class="headerlink" title="hotfixes修复分支"></a>hotfixes修复分支</h3><p><img src="https://wac-cdn.atlassian.com/dam/jcr:21cf772d-2ba5-4686-8259-fcd6fd2311df/05.svg?cdnVersion=fn" alt=""><br>维护分支：用于生成快速给产品发布版本。<br>这是唯一可以直接从master分支fork出来的分支。修复完成，修改应该马上合并回master分支和develop分支（当前的发布分支），master分支应该用新的版本号打好Tag。</p>
-<p>Gitflow 工作流没有用超出功能分支工作流的概念和命令，而是为不同的分支分配一个很明确的角色，并定义分支之间如何和什么时候进行交互。 除了使用功能分支，在做准备、维护和记录发布也使用各自的分支。 当然你可以用上功能分支工作流所有的好处：Pull Requests 、隔离实验性开发和更高效的协作。</p>
-<h1 id="Forking工作流"><a href="#Forking工作流" class="headerlink" title="Forking工作流"></a>Forking工作流</h1><p>Forking工作流是分布式工作流，充分利用了Git在分支和克隆上的优势。可以安全可靠地管理大团队的开发者（developer），并能接受不信任贡献者（contributor）的提交。</p>
-<h1 id="冲突解决"><a href="#冲突解决" class="headerlink" title="冲突解决"></a>冲突解决</h1><h2 id="大幅度"><a href="#大幅度" class="headerlink" title="大幅度"></a>大幅度</h2><ul>
-<li><a href="http://blog.jobbole.com/76867/#comment-156726" target="_blank" rel="external">Git工作流指南：Gitflow工作流</a></li>
-<li><a href="https://www.atlassian.com/git/tutorials/comparing-workflows" target="_blank" rel="external">Comparing Workflows</a></li>
-</ul>
-<h1 id="拓展"><a href="#拓展" class="headerlink" title="拓展"></a>拓展</h1><ul>
-<li><a href="http://wiki.jikexueyuan.com/project/git-workflow-tutorial/" target="_blank" rel="external">Git 工作流指南</a></li>
-<li><a href="http://nvie.com/posts/a-successful-git-branching-model/" title="成功的Git分支模型" target="_blank" rel="external">A successful Git branching model</a></li>
-<li><a href="https://tech.meituan.com/improving-git-flow_squashing-commits.html" target="_blank" rel="external">改进合作 Git 工作流：自动提取、合并提交</a></li>
-<li><a href="https://www.atlassian.com/git/tutorials/comparing-workflows" title="工作流比较" target="_blank" rel="external">Comparing Workflows</a></li>
-<li><a href="https://github.com/xirong/my-git/" title="有关 git 的学习资料" target="_blank" rel="external">my-git</a></li>
-<li><a href="&quot;&quot;"></a></li>
-<li><a href="&quot;&quot;"></a></li>
-<li><a href="&quot;&quot;"></a></li>
-<li><a href="&quot;&quot;"></a></li>
-<li><a href="&quot;&quot;"></a></li>
-</ul>
+<h2>github地址</h2>
+<p>最后老规矩，<a href="https://github.com/Jimmey-Jiang/Common.Utility.git" target="_blank">github地址</a> <a href="https://github.com/Jimmey-Jiang/Common.Utility.git" target="_blank">https://github.com/Jimmey-Jiang/Common.Utility.git</a>求star,喜欢点赞</p>
+<h2>里面的操作类都很详细，基本都有注释</h2>
+<p>比如这里展示一下 字符串操作帮助类就有下面这个方法：<br>
+1、GetStrArray(string str, char speater, bool toLower) 把字符串按照分隔符转换成 List<br>
+2、GetStrArray(string str) 把字符串转 按照, 分割 换为数据<br>
+3、GetArrayStr(List list, string speater) 把 List 按照分隔符组装成 string<br>
+4、GetArrayStr(List list) 得到数组列表以逗号分隔的字符串<br>
+5、GetArrayValueStr(Dictionary&lt;int, int&gt; list)得到数组列表以逗号分隔的字符串<br>
+6、DelLastComma(string str)删除最后结尾的一个逗号<br>
+7、DelLastChar(string str, string strchar)删除最后结尾的指定字符后的字符<br>
+8、ToSBC(string input)转全角的函数(SBC case)<br>
+9、ToDBC(string input)转半角的函数(SBC case)<br>
+10、GetSubStringList(string o_str, char sepeater)把字符串按照指定分隔符装成 List 去除重复<br>
+11、GetCleanStyle(string StrList, string SplitString)将字符串样式转换为纯字符串<br>
+12、GetNewStyle(string StrList, string NewStyle, string SplitString, out string Error)将字符串转换为新样式<br>
+13、SplitMulti(string str, string splitstr)分割字符串<br>
+14、SqlSafeString(string String, bool IsDel)<br>
+另外,主要参考<a href="https://gitee.com/kuiyu/dotnetcodes" target="_blank">https://gitee.com/kuiyu/dotnetcodes</a>，并在其基础上扩展</p>
 
+        </div>
       
       
         <div class="page-reward">
